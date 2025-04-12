@@ -74,7 +74,6 @@ fabric.properties
 venv/
 .env
 .DS_Store
-db.sqlite3
 Dockerfile2
 study.txt
 nginx.conf
