@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contents %}
+
+  <div>
+    {% include 'snippets/list_fragment.html' with article_list=article_list %}
+  </div>
+  <p style="margin-top: 21rem;">
+  </p>
+
+{% endblock %}

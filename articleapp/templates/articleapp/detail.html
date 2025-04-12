@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+
+<style>
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:active {
+  text-decoration: underline;
+}
+</style>
+
+<div>
+    <div style="text-align: center; max-width: 700px; margin: 0rem auto">
+        <h2 style="font-size: 2rem;">
+            {{ target_article.title }}
+        </h2>
+        <h6 style="font-size: .9rem;">
+            <a href="{% url 'accountapp:detail' pk=target_article.writer.pk %}" style="color: gray;" >
+                {{ target_article.writer.profile.nickname }}
+            </a>
+        </h6>
+        <hr>
+        <div style="text-align: center; font-size: .9rem; color: #565656; margin: -0.5rem auto">
+            {{ target_article.created_at }}
+        </div>
+        <br>
+        <img src="{{ target_article.image.url }}" style="width: 350px; cursor: pointer;" alt="" onclick="doImgPop('{{ target_article.image.url }}')">
+        <p>
+            <br><br>
+            {{ target_article.content }}
+        </p>
+
+        <br><hr>
+
+        <div style="margin: -.2rem;">
+            {% if not user.is_authenticated %}
+            <i class="far fa-thumbs-up fa-lg animated infinite bounce delay-1s" style="font-size: 1rem; color: gray;"></i>
+            <span style="font-size: .9rem;">{{ target_article.like_users.count }}</span>
+            &nbsp&nbsp
+            <i class="far fa-thumbs-down fa-lg animated infinite bounce delay-1s" style="font-size: 1rem; color: gray;"></i>
+            <span style="font-size: .9rem;">{{ target_article.dislike_users.count }}</span>
+            {% else %}
+            {% if request.user in target_article.like_users.all %}
+            <a href="{% url 'articleapp:like' target_article.pk %}" style="text-decoration: none">
+                <i class="far fa-thumbs-up fa-lg animated hinge delay-1s" style="font-size: 1rem; color: red;"></i>
+            </a>
+            <span style="font-size: .9rem;">{{ target_article.like_users.count }}</span>
+            {% else %}
+            <a href="{% url 'articleapp:like' target_article.pk %}" style="text-decoration: none">
+                <i class="far fa-thumbs-up fa-lg animated infinite bounce delay-1s" style="font-size: 1rem; color: gray;"></i>
+            </a>
+            <span style="font-size: .9rem;">{{ target_article.like_users.count }}</span>
+            {% endif %}
+
+            &nbsp&nbsp&nbsp
+
+            {% if request.user in target_article.dislike_users.all %}
+            <a href="{% url 'articleapp:dislike' target_article.pk %}" style="text-decoration: none">
+                <i class="far fa-thumbs-down fa-lg animated hinge delay-1s" style="font-size: 1rem; color: blue;"></i>
+            </a>
+            <span style="font-size: .9rem;">{{ target_article.dislike_users.count }}</span>
+            {% else %}
+            <a href="{% url 'articleapp:dislike' target_article.pk %}" style="text-decoration: none">
+                <i class="far fa-thumbs-down fa-lg animated infinite bounce delay-1s" style="font-size: 1rem; color: gray;"></i>
+            </a>
+            <span style="font-size: .9rem;">{{ target_article.dislike_users.count }}</span>
+            {% endif %}
+            {% endif %}
+        </div>
+
+        {% if target_article.writer == user %}
+        <a href="{% url 'articleapp:update' pk=target_article.pk %}" class="btn btn-primary btn-sm active col-1.5 mt-5 mb-3">
+            Article 수정
+        </a>
+        <a href="{% url 'articleapp:delete' pk=target_article.pk %}" class="btn btn-danger btn-sm active col-1.5 mt-5 mb-3">
+            Article 삭제
+        </a>
+        {% endif %}
+
+        {% for comment in target_article.comment.all %}
+        {% include 'commentapp/detail.html' with comment=comment %}
+        {% endfor %}
+
+        {% include 'commentapp/create.html' with article=target_article %}
+    </div>
+</div>
+
+<script>
+function doImgPop(img){
+    img1= new Image();
+    img1.src=(img);
+    imgControll(img);
+}
+
+function imgControll(img){
+    if((img1.width!=0)&&(img1.height!=0)){
+        viewImage(img);
+    }
+    else{
+        controller="imgControll('"+img+"')";
+        intervalID=setTimeout(controller,20);
+    }
+}
+
+function viewImage(img){
+    W=img1.width;
+    H=img1.height;
+    O="width="+W+",height="+H+",scrollbars=no";
+    imgWin=window.open("","",O);
+    imgWin.document.write("<html><head><title>{{ target_article.title }}</title></head>");
+    imgWin.document.write("<body topmargin=0 leftmargin=0></body>");
+    imgWin.document.write("<img src="+img+" onclick='self.close()' style='cursor:pointer;' title ='클릭하시면 창이 닫힙니다.'>");
+    imgWin.document.close();
+}
+</script>
+
+{% endblock %}

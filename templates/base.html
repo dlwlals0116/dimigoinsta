@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+{% include 'head.html' %}
+
+<body style="background-color: #f7f9fa">
+    {% include 'header.html' %}
+    <p></p><br>
+    {% block contents %}
+    {% endblock %}
+
+    {% include 'footer.html' %}
+</body>
+</html>

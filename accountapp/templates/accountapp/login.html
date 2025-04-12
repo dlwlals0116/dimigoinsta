@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block contents %}
+<div style="text-align: center; max-width: 360px; margin: 1rem auto">
+    <br>
+    <div style="font-size: 1.5rem; color: white; background-color: #b5c7ed;" class="btn btn-light btn-sm rounded-pill active px-4 mb-4">
+        로그인
+    </div>
+    <div>
+        <form action="{% url 'accountapp:login' %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+        <input type="submit" value="확인" class="btn btn-secondary btn-sm active rounded-pill col-5 mt-3">
+        </form>
+    </div>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br>
+</div>
+{% endblock %}

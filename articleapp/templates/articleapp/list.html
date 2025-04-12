@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contents %}
+
+<style>
+    .container {
+        padding: 0;
+        margin: 0, auto;
+    }
+
+    .container a {
+        width: 45%;
+        max-width: 250px;
+    }
+
+    .container div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 1rem;
+    }
+
+    .container img {
+        width: 100%;
+        border-radius: 1rem;
+    }
+
+
+    .selectbox {
+        position: relative;
+        width: 90px;  /* 너비설정 */
+        border: 1px solid #999;  /* 테두리 설정 */
+        z-index: 1;
+    }
+
+    .selectbox:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        width: 0;
+        height: 0;
+        margin-top: -1px;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid #333;
+    }
+
+    .selectbox label {
+        position: absolute;
+        top: 1px;  /* 위치정렬 */
+        left: 5px;  /* 위치정렬 */
+        padding: .1em .1em;  /* select의 여백 크기 만큼 */
+        color: #999;
+        z-index: -1;  /* IE8에서 label이 위치한 곳이 클릭되지 않는 것 해결 */
+    }
+
+    .selectbox select {
+        width: 100%;
+        height: auto;  /* 높이 초기화 */
+        line-height: normal;  /* line-height 초기화 */
+        font-family: inherit;  /* 폰트 상속 */
+        padding: .1em .1em;  /* 여백과 높이 결정 */
+        border: 0;
+        opacity: 1;  /* 숨기기 */
+        filter:alpha(opacity=0);  /* IE8 숨기기 */
+        -webkit-appearance: none; /* 네이티브 외형 감추기 */
+        -moz-appearance: none;
+        appearance: none;
+    }
+</style>
+
+<div style="position: relative; top: -1.5rem; opacity: 1;">
+    <form class="form-inline my-2 my-lg-0" action="{% url 'searchapp:search' %}" method="get">
+        {% csrf_token %}
+        <nav class="navbar navbar-expand-sm bg-light">
+            <input name="q" style="height: 30px" class="form-control mr-sm-2" type="text" placeholder="Search"> &nbsp&nbsp
+            <button style="width: 45px" class="btn btn-success btn-sm active" type="submit">검색</button>
+        </nav>
+    </form>
+    <div class="selectbox" style="position: relative; top: 2rem; left: 81%; opacity: .6; margin: -2rem;">
+        <select id="select" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+            <option value="{% url 'articleapp:list' %}">최신순</option>
+            <option value="{% url 'articleapp:plist' %}">인기순</option>
+            <option value="{% url 'articleapp:olist' %}">오래된순</option>
+        </select>
+    </div>
+</div>
+
+<br><br>
+
+{% if article_list %}
+<div class="container">
+    {% for article in article_list %}
+    <a href="{% url 'articleapp:detail' pk=article.pk %}">
+        {% include 'snippets/card.html' with article=article %}
+    </a>
+    {% endfor %}
+</div>
+<script src="{% static 'js/magicgrid.js' %}"></script>
+{% else %}
+<div style="text-align:center">
+    <h4>No Articles YET!</h4>
+</div>
+{% endif %}
+
+{% include 'snippets/pagination.html' with page_obj=page_obj %}
+
+{%  if user.is_authenticated %}
+<div style="text-align:center; margin: 2rem;">
+    <a href="{% url 'articleapp:create' %}" style="color: white; text-decoration: none;">
+        <button style="background-color: #778899; color: white" class="btn btn-light btn-sm rounded-pill mt-3 px-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-images" viewBox="0 0 16 16">
+              <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+              <path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2zM14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1zM2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10z"/>
+            </svg>
+            Create Article
+        </button>
+    </a>
+</div>
+{% endif %}
+
+{% endblock %}

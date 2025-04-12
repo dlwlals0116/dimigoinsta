@@ -1,0 +1,56 @@
+<style>
+.btn-secondary {
+    background-color: #262626;
+    border-color: #262626;
+    color: #FFF; }
+
+.btn-secondary:active:focus:visited:hover {
+    border-color: #565656;
+    background-color: #0095f6;
+    color: #FFF;}
+</style>
+
+<div style="text-align:center; background-color: #262626; margin: -1rem opacity: 0.5;">
+    <a href="{% url 'articleapp:list' %}" style="text-decoration:none" class="btn btn-secondary btn-sm col-.1 mt-3 mb-.1">
+    <div style="font-family: 'Kaushan Script', cursive; color: #0095f6">
+        <font style="font-size: 3.5rem">Dimigostargram</font>
+    </div>
+    </a>
+
+    <div>
+        <a href="{% url 'articleapp:list' %}" style="text-decoration:none" class="btn btn-secondary btn-sm col-.1 mt-3 mb-.1">
+            <span>Home</span>
+        </a>
+        &nbsp
+        <a href="{% url 'projectapp:list' %}" style="text-decoration:none" class="btn btn-secondary btn-sm col-.1 mt-3 mb-.1">
+            <span>Project</span>
+        </a>
+        &nbsp
+        <a href="{% url 'subscribeapp:list' %}" style="text-decoration:none" class="btn btn-secondary btn-sm col-.1 mt-3 mb-.1">
+            <span>Subsciption</span>
+        </a>
+        &nbsp
+        <a href="{% url 'followapp:list' %}" style="text-decoration:none" class="btn btn-secondary btn-sm col-.1 mt-3 mb-.1">
+            <span>Following</span>
+        </a>
+        &nbsp
+        {% if not user.is_authenticated %}
+        <a href="{% url 'accountapp:login' %}?next={{ request.path }} " style="text-decoration:none" class="btn btn-secondary btn-sm col-.1 mt-3 mb-.1">
+            <span>Login</span>
+        </a>
+        &nbsp
+        <a href="{% url 'accountapp:create' %}" style="text-decoration:none" class="btn btn-secondary btn-sm col-.1 mt-3 mb-.1">
+            <span>SignUp</span>
+        </a>
+        {% else %}
+        <a href="{% url 'accountapp:detail' pk=user.pk %}" style="text-decoration:none" class="btn btn-secondary btn-sm col-.1 mt-3 mb-.1">
+            <span>MyPage</span>
+        </a>
+        &nbsp
+        <a href="{% url 'accountapp:logout' %}?next={{ request.path }}" style="text-decoration:none" class="btn btn-secondary btn-sm col-.1 mt-3 mb-.1">
+            <span>Logout</span>
+        </a>
+        {% endif %}
+    </div>
+</div>
+

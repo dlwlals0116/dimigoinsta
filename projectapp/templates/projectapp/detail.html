@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block contents %}
+
+
+<div style="text-align: center; max-width: 500px; margin: 1rem auto">
+    <img src="{{ target_project.image.url }}" alt="" style="height: 10rem; width: 10rem; border-radius: 10rem; margin-bottom: .5rem; object-fit: cover;">
+    <h6 style="font-size: .8rem; color: gray;">
+        {{ target_project.created_at }}
+    </h6>
+    <h2 style="font-size: 2rem; margin: .6rem;">
+        {{ target_project.title }}
+    </h2>
+    <h6 style="font-size: .9rem; color: gray; margin: -.3rem;">
+        {{ target_project.description }}
+    </h6>
+</div>
+
+<div class="text-center" style="margin: 1.5rem;">
+    {% if user.is_authenticated %}
+        {% if not subscription %}
+        <a href="{% url 'subscribeapp:subscribe' %}?project_pk={{ target_project.pk }}" style="background-color:#cc0000;" class="btn btn-danger btn-sm px-4">
+            &nbsp구독&nbsp
+        </a>
+        {% else %}
+        <a href="{% url 'subscribeapp:subscribe' %}?project_pk={{ target_project.pk }}" class="btn btn-secondary btn-sm active px-4">
+            구독중
+        </a>
+        {% endif %}
+    {% endif %}
+</div>
+
+<div style="margin: 0rem; text-align: center">
+    <div style="width: 5rem; max-width: 28%; height: auto; border: black; display: inline-block; vertical-align: middle">
+
+        <p style="margin-bottom: 0; margin-top: 1rem; font-size: .9rem">게시글</p>
+        <p style="vertical-align: middle; font-size: 1rem; color: #999">
+            {{ object_list.count }}
+        </p>
+    </div>
+    <div style="width: .05rem; height: 2rem; background-color: #979797;
+    display: inline-block; vertical-align: middle"></div>
+    <div style="width: 5rem; max-width: 28%; height: auto; border: black; display: inline-block; vertical-align: middle">
+
+        <p style="margin-bottom: 0; margin-top: 1rem; font-size: .9rem">구독자</p>
+        <p style="vertical-align: middle; font-size: 1rem; color: #999">
+            {{ target_project.subscription.count }}
+        </p>
+    </div>
+</div>
+
+<hr style="margin: 1.5rem;">
+
+<div style="margin-top: 2rem;">
+    {% include 'snippets/list_fragment.html' with article_list=object_list %}
+</div>
+
+
+{% endblock %}
