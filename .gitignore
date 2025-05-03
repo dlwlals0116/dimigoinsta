@@ -77,3 +77,8 @@ venv/
 Dockerfile2
 study.txt
 nginx.conf
+db.sqlite3
+./Dockerfile2
+./Dockerfile3
+./Dockerfile4
+./nginx.conf
